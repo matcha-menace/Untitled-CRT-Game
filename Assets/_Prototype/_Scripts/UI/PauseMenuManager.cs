@@ -11,21 +11,11 @@ public class PauseMenuManager : MonoBehaviour
     [SerializeField] private VHSButton endFirstSelectButton;
 
     [SerializeField] private VHSButton[] endDisableButtons;
-    [SerializeField] private VHSButton[] altNavButtons;
     
     private void Awake()
     {
         Services.PauseMenuManager = this;
         pauseCanvas = GetComponent<Canvas>();
-    }
-
-    private void Update()
-    {
-        foreach (var b in altNavButtons)
-        {
-            b.isAltNav = !RewindManager.CanRewind;
-            Debug.Log(RewindManager.CanRewind);
-        }
     }
 
     public void ToggleEnd()
@@ -48,8 +38,8 @@ public class PauseMenuManager : MonoBehaviour
 
     public void Eject()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        // Application.Quit();
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Application.Quit();
     }
 
 }

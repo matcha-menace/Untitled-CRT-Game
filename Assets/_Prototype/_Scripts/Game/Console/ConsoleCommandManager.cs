@@ -1,20 +1,12 @@
 using System;
 using System.Collections;
-using ChatGPTWrapper;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class ConsoleCommandManager : MonoBehaviour
 { 
-    private ChatGPTConversation chatGPT;
     [SerializeField] private ConsoleCommand[] consoleCommands;
-    [SerializeField] private TMP_InputField apiInputField;
-
-    private void Awake()
-    {
-        chatGPT = GetComponent<ChatGPTConversation>();
-    }
 
     /// <summary>
     /// Check if a console command has been triggered or not
@@ -71,7 +63,6 @@ public class ConsoleCommandManager : MonoBehaviour
     public void ConsoleCommand_Reboot()
     {
         StartCoroutine(ConsoleCommandRoutine_Reboot());
-        chatGPT.ResetChat(chatGPT._initialPrompt);
     }
     IEnumerator ConsoleCommandRoutine_Reboot()
     {
@@ -80,49 +71,10 @@ public class ConsoleCommandManager : MonoBehaviour
         ConsoleMenuManager.chatLog = $"{ConsoleMenuManager.consoleName} Console rebooting..." +
                                  $"\n{ConsoleMenuManager.consoleName} Console rebooted.";
     }
-    
-    /// <summary>
-    /// Init API
-    /// </summary>
-    /// <param name="parameters">API</param>
-    public void ConsoleCommand_Init(string parameters)
-    {
-        // check if already initialized
-        if (Services.ConsoleMenuManager.consoleInitialized)
-        {
-            ConsoleMenuManager.chatLog += $"\n{ConsoleMenuManager.consoleName} Console already initialized.";
-            return;
-        }
-        chatGPT._apiKey = parameters;
-        chatGPT.Init();
-        ConsoleMenuManager.chatLog += $"\n{ConsoleMenuManager.consoleName} Console initialized.";
-    }
-    
-    /// <summary>
-    /// Init
-    /// </summary>
-    public void ConsoleCommand_Init()
-    {
-        // check if already initialized
-        if (Services.ConsoleMenuManager.consoleInitialized)
-        {
-            ConsoleMenuManager.chatLog += $"\n{ConsoleMenuManager.consoleName} Console already initialized.";
-            return;
-        }
-        if (apiInputField.text == "") 
-        {
-            ConsoleMenuManager.chatLog += $"\n{ConsoleMenuManager.consoleName} API not found. " +
-                                  "Use => <color=#e32954>/init APIKey</color>";
-            return;
-        }
-        chatGPT._apiKey = apiInputField.text;
-        chatGPT.Init();
-        ConsoleMenuManager.chatLog += $"\n{ConsoleMenuManager.consoleName} Console initialized.";
-    }
 }
 
 public enum ConsoleCommands{
-    Clear, Reboot, Init,
+    Clear, Reboot,
 }
 
 [Serializable]
@@ -137,7 +89,6 @@ public class ConsoleCommand
             {
                 ConsoleCommands.Clear => "clear",
                 ConsoleCommands.Reboot => "reboot",
-                ConsoleCommands.Init => "init",
             };
         }
     }

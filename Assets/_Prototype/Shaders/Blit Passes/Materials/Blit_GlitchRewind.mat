@@ -70,7 +70,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _UnscaledTime: 0
-    - _Weight: 0
+    - _Weight: 1
     - _Width: 0.5
     - _unscaledTime: 0
     m_Colors:
