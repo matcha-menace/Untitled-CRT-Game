@@ -118,7 +118,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.9433962, g: 0.7447524, b: 0.13794944, a: 1}
+  m_Color: {r: 1, g: 0.23529412, b: 0, a: 1}
   m_Intensity: 0.5
   m_Range: 0.6
   m_SpotAngle: 30
@@ -350,7 +350,7 @@ Transform:
   m_GameObject: {fileID: 3572670108874576240}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1706652, y: -0, z: -0, w: 0.9853291}
-  m_LocalPosition: {x: 0.16658574, y: 4.99, z: -13.998293}
+  m_LocalPosition: {x: -0.8317679, y: 4.99, z: -14.00042}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -367,7 +367,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.1981132, g: 0.1873101, b: 0.17848878, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -696,7 +696,6 @@ GameObject:
   - component: {fileID: 8130346067340669711}
   - component: {fileID: 2283497207767535562}
   - component: {fileID: 1398511029790410377}
-  - component: {fileID: 1024201156471284310}
   - component: {fileID: 3207518268518561674}
   - component: {fileID: 4179912131578588838}
   m_Layer: 10
@@ -872,33 +871,8 @@ MonoBehaviour:
   dashDistance: 3
   dashDuration: 0.1
   dashCooldown: 0.5
+  previousCameraDirection: 0
   isLookingBack: 0
---- !u!114 &1024201156471284310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5370757714342594591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 021326370c6c7c6449284e2ad185c128, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewRadius: 50
-  viewAngle: 360
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 256
-  wallMask:
-    serializedVersion: 2
-    m_Bits: 128
-  visibleEntities: []
-  viewMeshFilter: {fileID: 7627711086366141731}
-  meshResolution: 6
-  edgeResolveIterations: 6
-  edgeDistThreshold: 30
-  findTargetDelay: 0.01
 --- !u!114 &3207518268518561674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -915,6 +889,10 @@ MonoBehaviour:
   guidanceBallBlockMask:
     serializedVersion: 2
     m_Bits: 448
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  defaultColor: {r: 1, g: 0.3137255, b: 0, a: 1}
 --- !u!114 &4179912131578588838
 MonoBehaviour:
   m_ObjectHideFlags: 0

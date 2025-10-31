@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 public enum CameraDirection
-{ South, SouthWest, West, NorthWest, North, NorthEast, East, SouthEast, Count };
+{ North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest, Count };
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviour
     [Header("Camera Switch")]
     [SerializeField] private CameraSwitcher cameraSwitcher;
     [SerializeField] private float camLerpDuration;
-    [HideInInspector] public CameraDirection currentCameraDirection;
+    [SerializeField] public CameraDirection currentCameraDirection;
     [HideInInspector] public bool isInvertedControls;
     private bool playerLeft; // for changing animation of running left & right
     private Coroutine camSwitchRoutineInstance;
@@ -54,6 +55,11 @@ public class PlayerController : MonoBehaviour
     [Range(0, .5f)]
     [SerializeField] private float dashDuration;
     [SerializeField] private float dashCooldown;
+    
+    // intersection
+    [SerializeField] private CameraDirection previousCameraDirection;
+    public bool isInIntersection { get; set; }
+    public IntersectionManager activeIntersectionManager { get; set; }
     
     // test
     [Header("Test")]
@@ -121,7 +127,7 @@ public class PlayerController : MonoBehaviour
         Services.PlayerController = this;
         LoadControlSettings();
         SubscribeInputEvents();
-        currentCameraDirection = CameraDirection.South;
+        currentCameraDirection = CameraDirection.North;
     }
     
     public void TogglePlayerInput(bool isActive)
@@ -251,19 +257,19 @@ public class PlayerController : MonoBehaviour
     {
         if (isLookingBack || GameManager.IsGamePaused || GameManager.IsGameEnded || !cameraSwitcher.isDefault) return; // prevent camera change when looking back
         var camIndex = (int)currentCameraDirection;
+        previousCameraDirection = currentCameraDirection;
         switch (direction)
         {
             case "Right":
-                camIndex += isInvertedControls ? -1 : 1;
+                camIndex += isInvertedControls ? -2 : 2;
                 lastFacing = !isInvertedControls;
                 break;
             case "Left":
-                camIndex += isInvertedControls ? 1 : -1;
+                camIndex += isInvertedControls ? 2 : -2;
                 lastFacing = isInvertedControls;
                 break;
         }
-        if (camIndex > (int)CameraDirection.Count - 1) camIndex = 0;
-        if (camIndex < 0) camIndex = (int)CameraDirection.Count - 1;
+        camIndex = Helpers.Wrap(camIndex, (int)CameraDirection.Count - 1);
         // log camera position
         // RewindManager.LogCamera(currentCameraDirection);
         SwitchCamera((CameraDirection)camIndex, camLerpDuration);
@@ -278,6 +284,13 @@ public class PlayerController : MonoBehaviour
         currentCameraDirection = direction;
         if (camSwitchRoutineInstance != null) StopCoroutine(camSwitchRoutineInstance);
         camSwitchRoutineInstance = StartCoroutine(CameraSwitchRoutine(GetTargetAngle(), lerpDuration));
+
+        if (isInIntersection)
+        {
+            var indexChecker = (int)direction - 2;
+            if (indexChecker < 0) indexChecker = (int)CameraDirection.Count - 2;
+            activeIntersectionManager.OnToggleContact(direction, (int)previousCameraDirection == indexChecker);
+        }
     }
     
     private IEnumerator CameraSwitchRoutine(float angle, float duration)
@@ -301,14 +314,14 @@ public class PlayerController : MonoBehaviour
     {
         float angle = currentCameraDirection switch
         {
-            CameraDirection.South => 0,
-            CameraDirection.SouthWest => 45,
-            CameraDirection.West => 90,
-            CameraDirection.NorthWest => 135,
-            CameraDirection.North => 180,
-            CameraDirection.NorthEast => -135,
-            CameraDirection.East => -90,
-            CameraDirection.SouthEast => -45,
+            CameraDirection.North => 0,
+            CameraDirection.NorthEast => 45,
+            CameraDirection.East => 90,
+            CameraDirection.SouthEast => 135,
+            CameraDirection.South => 180,
+            CameraDirection.SouthWest => -135,
+            CameraDirection.West => -90,
+            CameraDirection.NorthWest => -45,
         };
 
         angle += isLookingBack ? 180 : 0;

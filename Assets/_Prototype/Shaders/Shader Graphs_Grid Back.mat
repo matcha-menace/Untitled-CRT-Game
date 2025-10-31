@@ -55,7 +55,7 @@ Material:
     - _QueueOffset: 0
     - _Thickness: 0.05
     m_Colors:
-    - _Cell_Size: {r: 5, g: 5, b: 0, a: 0}
-    - _Color: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 0}
-    - _Emissive_Color: {r: 0.056016836, g: 0.056016836, b: 0.056016836, a: 0}
+    - _Cell_Size: {r: 3, g: 3, b: 0, a: 0}
+    - _Color: {r: 0.046858337, g: 0.09389147, b: 0.764151, a: 0}
+    - _Emissive_Color: {r: 0.08503916, g: 0.08877745, b: 0.122641504, a: 0}
   m_BuildTextureStacks: []

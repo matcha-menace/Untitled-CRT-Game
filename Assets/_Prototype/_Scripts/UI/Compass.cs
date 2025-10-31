@@ -14,14 +14,14 @@ public class Compass : MonoBehaviour
     {
         targetRotationZ = playerController.currentCameraDirection switch
         {
-            CameraDirection.South => 270,
-            CameraDirection.SouthWest => 225,
-            CameraDirection.West => 180,
-            CameraDirection.NorthWest => 135,
-            CameraDirection.North => 90,
-            CameraDirection.NorthEast => 45,
-            CameraDirection.East => 0,
-            CameraDirection.SouthEast => 315,
+            CameraDirection.North => 270,
+            CameraDirection.NorthEast => 225,
+            CameraDirection.East => 180,
+            CameraDirection.SouthEast => 135,
+            CameraDirection.South => 90,
+            CameraDirection.SouthWest => 45,
+            CameraDirection.West => 0,
+            CameraDirection.NorthWest => 315,
         };
 
         if (!cameraSwitcher.isDefault)
